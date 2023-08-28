@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Setting up the renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000);
+renderer.setClearColor(0x555);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 document.body.appendChild(renderer.domElement);
@@ -15,9 +16,20 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 
 // Setting up the camera
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.set(4, 5, 11);
-camera.lookAt(0, 0, 0);
+
+// Setting up orbit controls to manipulate the camera
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 5;
+controls.maxDistance = 20;
+controls.minPolarAngle = 0.5;
+controls.maxPolarAngle = 1.5;
+controls.autoRotate = false;
+controls.target = new THREE.Vector3(0, 1, 0);
+controls.update();
 
 //Adding some geometry to make sure the scene is working properly
 const groundGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
@@ -33,8 +45,8 @@ const spotLight = new THREE.SpotLight( 0xffffff, 3, 100, 0.2, 0.5);
 spotLight.position.set( 0, 25, 0);
 scene.add(spotLight);
 
-const loader = new GLTFLoader();
-loader.load('test/scene.gltf', (gltf) => {
+const loader = new GLTFLoader().setPath('test/');
+loader.load('scene.gltf', (gltf) => {
   const mesh = gltf.scene;
   mesh.position.set(0, 1.05, -1);
   scene.add(mesh);
@@ -43,6 +55,7 @@ loader.load('test/scene.gltf', (gltf) => {
 // Function to render the scene 
 function animate() {
   requestAnimationFrame(animate);
+  controls.update();
   renderer.render(scene, camera);
 }
 
