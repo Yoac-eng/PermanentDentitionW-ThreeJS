@@ -45,6 +45,10 @@ const spotLight = new THREE.SpotLight( 0xffffff, 3, 100, 0.2, 0.5);
 spotLight.position.set( 0, 25, 0);
 scene.add(spotLight);
 
+// Helper to display a cone shaped helpr object for a spotlight
+const spotLightHelper = new THREE.SpotLightHelper( spotLight );
+scene.add( spotLightHelper );
+
 const loader = new GLTFLoader().setPath('test/');
 loader.load('scene.gltf', (gltf) => {
   const mesh = gltf.scene;
@@ -56,6 +60,7 @@ loader.load('scene.gltf', (gltf) => {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
+  spotLightHelper.update()
   renderer.render(scene, camera);
 }
 
