@@ -32,7 +32,7 @@ controls.target = new THREE.Vector3(0, 1, 0);
 controls.update();
 
 //Adding some geometry to make sure the scene is working properly
-const groundGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
+const groundGeometry = new THREE.PlaneGeometry(15, 15, 22, 22);
 groundGeometry.rotateX(-Math.PI / 2);
 const groundMaterial = new THREE.MeshStandardMaterial({
   color: 0x555555,
@@ -41,9 +41,10 @@ const groundMaterial = new THREE.MeshStandardMaterial({
 const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
 scene.add(groundMesh);
 
-const spotLight = new THREE.SpotLight( 0xffffff, 3, 100, 0.2, 0.5);
-spotLight.position.set( 0, 25, 0);
+const spotLight = new THREE.SpotLight( 0xffffff, 10, 30, 0.2, 1, 0.1);
+spotLight.position.set( 0, 15, 15);
 scene.add(spotLight);
+
 
 // Helper to display a cone shaped helpr object for a spotlight
 const spotLightHelper = new THREE.SpotLightHelper( spotLight );
@@ -60,7 +61,7 @@ loader.load('scene.gltf', (gltf) => {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
-  spotLightHelper.update()
+  // spotLightHelper.update()
   renderer.render(scene, camera);
 }
 
